@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat App</title>
+    <style>
+        #chatBody {
+            overflow-Y: scroll;
+            height: 85vh;
+            width: 100%;
+            background: lightblue;
+        }
+
+        #getMessageValue {
+            height: 6vh;
+            width: 90%;
+            font-size: 25px;
+            font-family: monospace;
+            border-radius: 15px;
+            border: 1px solid black;
+        }
+
+        button {
+            height: 5vh;
+            width: 9%;
+            background: cornflowerblue;
+            border: 1px solid black;
+            border-radius: 13px;
+        }
+
+        #messages {
+            font-size: 28px;
+            font-family: monospace;
+            background: burlywood;
+            width: fit-content;
+            border: 1px solid black;
+            border-radius: 6px;
+            height: 8vh;
+        }
+
+        #username {
+            font-family: monospace;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+        <div>
+                <h1 id="username"></h1>
+                <div id="chatBody">
+                
+                </div>
+                <div>
+                    <input type="text" id="getMessageValue">
+                    <button onclick="saveToLocalStorage()">Send</button>
+                </div>
+            </div>`
+
+    <script>
+
+        let username = prompt('|Username|')
+        document.getElementById('username').innerHTML= username
+
+        // body function
+
+
+        function saveToLocalStorage() {
+
+            let messages = document.getElementById('getMessageValue').value;
+
+            let messageUser = {
+                name: username,
+                message: messages
+            }
+
+            if (localStorage.getItem('messageUsers') === null) {
+
+                let messageUsers = [];
+
+                messageUsers.push(messageUser);
+
+                localStorage.setItem('messageUsers', JSON.stringify(messageUsers));
+            } else {
+
+                let messageUsers = JSON.parse(localStorage.getItem('messageUsers'));
+
+                messageUsers.push(messageUser);
+
+                localStorage.setItem('messageUsers', JSON.stringify(messageUsers));
+            }
+            document.getElementById('getMessageValue').value = null;
+
+        }
+
+        function showMessages() {
+
+            let body = document.getElementById('chatBody');
+            let messages = JSON.parse(localStorage.getItem('messageUsers'));
+            body.innerHTML = ''
+            messages.map((value, index) => {
+                body.innerHTML += `
+                <i id="username">${messages[index].name}: </i>
+                <i id="messages">${messages[index].message}</i>
+                <br /><br />
+                `
+            })
+
+
+
+        }
+
+
+    setInterval(() => {
+       showMessages();
+    }, 500)
+    showMessages();
+   </script>
+
+</body>
+
+</html>

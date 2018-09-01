@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Github Api</title>
+    <style>
+        .bodyDiv {
+            text-align: center;
+            margin: 0px auto;
+        }
+
+        .none {
+            display: none;
+        }
+
+        .block {
+            text-align: center;
+            display: block;
+            margin-left: 36%;
+        }
+
+        #getUser {
+            width: 20%;
+            height: 20px;
+            /* border: 1px solid black; */
+            border-radius: 5px
+        }
+
+        button {
+            width: 80px;
+            height: 28px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bodyDiv">
+        <input type="text" placeholder="Git Id" id="getUser">
+        <button onclick="gitApi()">Check</button>
+
+        <table id="allIdData" class="none">
+            <tr>
+                <th id="image" rowspan="10">
+
+                </th>
+            </tr>
+            <tr>
+                <th>Username : </th>
+                <th id="username"></th>
+            </tr>
+            <tr>
+                <th>Id :</th>
+                <th id="id"></th>
+            </tr>
+            <tr>
+                <th>Followers :</th>
+                <th id="followers"></th>
+            </tr>
+            <tr>
+                <th>Following :</th>
+                <th id="following"></th>
+            </tr>
+            <tr>
+                <th>Type :</th>
+                <th id="type"></th>
+            </tr>
+            <tr>
+                <th>Url :</th>
+                <th id="url"></th>
+            </tr>
+
+            <tr>
+                <th>Public Repos :</th>
+                <th id="reposPub"></th>
+
+            </tr>
+            <tr>
+                <th>Location :</th>
+                <th id="locate"></th>
+            </tr>
+        </table>
+    </div>
+    <script>
+        function gitApi() {
+            document.getElementById('allIdData').className = 'block';
+            const GitApiUrl = 'https://api.github.com/users/';
+            const userId = document.getElementById('getUser').value;
+            const fullUrl = GitApiUrl + userId;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            fetch(fullUrl, options).then(response => {
+                if (response.status == 200) {
+                    return response.json();
+                }
+                throw response;
+            }).then(json => {
+                console.log({ json });
+                document.getElementById('image').innerHTML = `<img style='width: 200px' src='${json.avatar_url}'> `
+                document.getElementById('username').innerHTML = json.name;
+                document.getElementById('id').innerHTML = json.id
+                document.getElementById('followers').innerHTML = json.followers
+                document.getElementById('following').innerHTML = json.following
+                document.getElementById('type').innerHTML = json.type
+                document.getElementById('url').innerHTML = `<a href='${json.html_url}' target='_blavk'>User Url</a>`
+                document.getElementById('reposPub').innerHTML = json.public_repos
+                document.getElementById('locate').innerHTML = json.location
+            }).catch(error => {
+                alert('Id Not Found')
+            })
+
+        }
+
+    </script>
+</body>
+
+</html>
